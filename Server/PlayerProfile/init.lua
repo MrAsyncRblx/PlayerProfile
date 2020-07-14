@@ -17,6 +17,7 @@ local MaidClass = require(ReplicatedStorage.Modules:WaitForChild("Maid"))
 
 --//Locals
 local DefaultData = require(script:WaitForChild("DefaultData"))
+local Profiles = {}
 
 local VALUE_EXCHANGE = {
 	["boolean"] = "BoolValue",
@@ -37,6 +38,8 @@ function PlayerProfile.new(player)
 		
 		_Maid = MaidClass.new()
 	}, PlayerProfile)
+	
+	Profiles[player] = self
 	
 	--Create container for replicated data
 	local repDataFolder = Instance.new("Folder")
@@ -89,6 +92,12 @@ end
 --//Called automatically when player leaves
 function PlayerProfile:Unload()
 	self._Maid:Destroy()
+	Profiles[self.Player] = nil
+end
+
+
+function PlayerProfile:Get(player)
+	return Profiles[player]
 end
 
 
